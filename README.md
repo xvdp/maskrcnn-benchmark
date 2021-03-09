@@ -2,6 +2,10 @@
 
 **maskrcnn-benchmark has been deprecated. Please see [detectron2](https://github.com/facebookresearch/detectron2), which includes implementations for all models in maskrcnn-benchmark**
 
+## @xvdp Feb 2021
+* even if deprecated, Fixed .cpp and .cu compilation with CUDA 10+ and PyTorch >= 1.5, reason:
+* great as the idea behind these projects is, the loading and training code is overly convoluted, instead of lumping together into more complex projects, these models should be separated. One should be able to train any of of the Detectron projects with 3 lines of code; to understand where issues lies, I fixed this project to run on current cuda and pytorch.
+
 This project aims at providing the necessary building blocks for easily
 creating detection and segmentation models using PyTorch 1.0.
 
