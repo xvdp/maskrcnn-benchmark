@@ -126,16 +126,16 @@ at::Tensor SigmoidFocalLoss_forward_cuda(
     return losses;
   }
 
-  AT_DISPATCH_FLOATING_TYPES(logits.type(), "SigmoidFocalLoss_forward", [&] {
+  AT_DISPATCH_FLOATING_TYPES(logits.scalar_type(), "SigmoidFocalLoss_forward", [&] {
     SigmoidFocalLossForward<scalar_t><<<grid, block, 0, stream>>>(
          losses_size,
-         logits.contiguous().data<scalar_t>(),
-	 targets.contiguous().data<int>(),
+         logits.contiguous().data_ptr<scalar_t>(),
+	 targets.contiguous().data_ptr<int>(),
          num_classes,
 	 gamma,
 	 alpha,
 	 num_samples,
-         losses.data<scalar_t>());
+         losses.data_ptr<scalar_t>());
   });
   THCudaCheck(cudaGetLastError());
   return losses;   
@@ -170,17 +170,17 @@ at::Tensor SigmoidFocalLoss_backward_cuda(
     return d_logits;
   }
 
-  AT_DISPATCH_FLOATING_TYPES(logits.type(), "SigmoidFocalLoss_backward", [&] {
+  AT_DISPATCH_FLOATING_TYPES(logits.scalar_type(), "SigmoidFocalLoss_backward", [&] {
     SigmoidFocalLossBackward<scalar_t><<<grid, block, 0, stream>>>(
          d_logits_size,
-         logits.contiguous().data<scalar_t>(),
-	 targets.contiguous().data<int>(),
-	 d_losses.contiguous().data<scalar_t>(),
+         logits.contiguous().data_ptr<scalar_t>(),
+	 targets.contiguous().data_ptr<int>(),
+	 d_losses.contiguous().data_ptr<scalar_t>(),
          num_classes,
 	 gamma,
 	 alpha,
 	 num_samples,
-         d_logits.data<scalar_t>());
+         d_logits.data_ptr<scalar_t>());
   });
 
   THCudaCheck(cudaGetLastError());
